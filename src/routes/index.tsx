@@ -19,7 +19,7 @@ function Index() {
   const heroItems = data.trending.filter((i) => i.backdrop_path).slice(0, 8);
   return (
     <div>
-      {heroItems.length > 0 && <Hero items={heroItems} />
+      {heroItems.length > 0 && <Hero items={heroItems} />}
       <div className="-mt-24 relative z-20">
         <MediaRow title="Em alta esta semana" items={data.trending} />
         <MediaRow title="Filmes populares" items={data.popularMovies} />
