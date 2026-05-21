@@ -1,26 +1,33 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { getHomeData } from "@/lib/tmdb.functions";
+import { Hero } from "@/components/Hero";
+import { MediaRow } from "@/components/MediaRow";
+
+const homeQuery = queryOptions({
+  queryKey: ["home"],
+  queryFn: () => getHomeData(),
+});
 
 export const Route = createFileRoute("/")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(homeQuery),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function Index() {
+  const { data } = useSuspenseQuery(homeQuery);
+  const hero = data.trending.find((i) => i.backdrop_path) ?? data.trending[0];
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div>
+      {hero && <Hero item={hero} />}
+      <div className="-mt-24 relative z-20">
+        <MediaRow title="Em alta esta semana" items={data.trending} />
+        <MediaRow title="Filmes populares" items={data.popularMovies} />
+        <MediaRow title="Séries populares" items={data.popularTv} />
+        <MediaRow title="Ação" items={data.actionMovies} />
+        <MediaRow title="Filmes mais bem avaliados" items={data.topMovies} />
+        <MediaRow title="Séries mais bem avaliadas" items={data.topTv} />
+      </div>
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
