@@ -19,12 +19,12 @@ export function Navbar() {
         scrolled ? "bg-background/95 backdrop-blur" : "bg-gradient-to-b from-background/80 to-transparent"
       }`}
     >
-      <div className="flex items-center justify-between px-4 md:px-12 h-16">
-        <div className="flex items-center gap-8">
-          <Link to="/" className="text-primary font-black text-2xl md:text-3xl tracking-tight">
+      <div className="flex items-center justify-between gap-2 px-3 sm:px-4 md:px-12 h-14 sm:h-16">
+        <div className="flex items-center gap-4 sm:gap-8 min-w-0">
+          <Link to="/" className="text-primary font-black text-xl sm:text-2xl md:text-3xl tracking-tight shrink-0">
             CINEFLIX
           </Link>
-          <nav className="hidden md:flex gap-5 text-sm text-foreground/90">
+          <nav className="hidden sm:flex gap-3 md:gap-5 text-sm text-foreground/90">
             <Link to="/" className="hover:text-primary">Início</Link>
             <Link to="/movies" className="hover:text-primary">Filmes</Link>
             <Link to="/series" className="hover:text-primary">Séries</Link>
@@ -35,17 +35,22 @@ export function Navbar() {
             e.preventDefault();
             if (q.trim()) navigate({ to: "/search", search: { q } });
           }}
-          className="flex items-center gap-2 bg-background/70 border border-border rounded px-2 py-1"
+          className="flex items-center gap-2 bg-background/70 border border-border rounded px-2 py-1 shrink"
         >
-          <Search className="w-4 h-4 text-muted-foreground" />
+          <Search className="w-4 h-4 text-muted-foreground shrink-0" />
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Buscar..."
-            className="bg-transparent text-sm outline-none w-32 md:w-56 placeholder:text-muted-foreground"
+            className="bg-transparent text-sm outline-none w-24 sm:w-40 md:w-56 placeholder:text-muted-foreground"
           />
         </form>
       </div>
+      <nav className="sm:hidden flex gap-4 px-3 pb-2 text-sm text-foreground/90">
+        <Link to="/" className="hover:text-primary">Início</Link>
+        <Link to="/movies" className="hover:text-primary">Filmes</Link>
+        <Link to="/series" className="hover:text-primary">Séries</Link>
+      </nav>
     </header>
   );
 }
