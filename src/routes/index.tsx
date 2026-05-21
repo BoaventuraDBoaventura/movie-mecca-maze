@@ -16,10 +16,10 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { data } = useSuspenseQuery(homeQuery);
-  const hero = data.trending.find((i) => i.backdrop_path) ?? data.trending[0];
+  const heroItems = data.trending.filter((i) => i.backdrop_path).slice(0, 8);
   return (
     <div>
-      {hero && <Hero item={hero} />}
+      {heroItems.length > 0 && <Hero items={heroItems} />
       <div className="-mt-24 relative z-20">
         <MediaRow title="Em alta esta semana" items={data.trending} />
         <MediaRow title="Filmes populares" items={data.popularMovies} />
