@@ -14,6 +14,7 @@ interface Props {
 
 export function CategoryBrowser({ title, type, anime }: Props) {
   const [genre, setGenre] = useState<{ id: number; name: string } | null>(null);
+  const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -25,6 +26,9 @@ export function CategoryBrowser({ title, type, anime }: Props) {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
+  // Reset to page 1 when filter changes
+  useEffect(() => { setPage(1); }, [genre?.id, anime, type]);
+
   const genresQuery = useQuery({
     queryKey: ["genres", type],
     queryFn: () => getGenres({ data: { type } }),
@@ -32,12 +36,16 @@ export function CategoryBrowser({ title, type, anime }: Props) {
   });
 
   const itemsQuery = useQuery({
-    queryKey: ["discover", type, genre?.id ?? null, anime ?? false],
+    queryKey: ["discover", type, genre?.id ?? null, anime ?? false, page],
     queryFn: () =>
-      discoverMedia({ data: { type, genre: genre?.id, anime } }),
+      discoverMedia({ data: { type, genre: genre?.id, anime, page } }),
+    placeholderData: (prev) => prev,
   });
 
   const genres = genresQuery.data ?? [];
+  const items = itemsQuery.data?.results ?? [];
+  const totalPages = itemsQuery.data?.totalPages ?? 1;
+
 
   return (
     <div className="pt-24 pb-12">
