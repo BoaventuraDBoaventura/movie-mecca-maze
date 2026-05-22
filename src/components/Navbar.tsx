@@ -28,7 +28,9 @@ export function Navbar() {
             <Link to="/" className="hover:text-primary">Início</Link>
             <Link to="/movies" className="hover:text-primary">Filmes</Link>
             <Link to="/series" className="hover:text-primary">Séries</Link>
+            <Link to="/anime" className="hover:text-primary">Animes</Link>
           </nav>
+
         </div>
         <form
           onSubmit={(e) => {
@@ -46,11 +48,13 @@ export function Navbar() {
           />
         </form>
       </div>
-      <nav className="sm:hidden flex gap-4 px-3 pb-2 text-sm text-foreground/90">
-        <Link to="/" className="hover:text-primary">Início</Link>
-        <Link to="/movies" className="hover:text-primary">Filmes</Link>
-        <Link to="/series" className="hover:text-primary">Séries</Link>
+      <nav className="sm:hidden flex gap-4 px-3 pb-2 text-sm text-foreground/90 overflow-x-auto no-scrollbar">
+        <Link to="/" className="hover:text-primary shrink-0">Início</Link>
+        <Link to="/movies" className="hover:text-primary shrink-0">Filmes</Link>
+        <Link to="/series" className="hover:text-primary shrink-0">Séries</Link>
+        <Link to="/anime" className="hover:text-primary shrink-0">Animes</Link>
       </nav>
+
     </header>
   );
 }
