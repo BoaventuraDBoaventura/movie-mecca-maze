@@ -135,3 +135,29 @@ export const getSeason = createServerFn({ method: "GET" })
     }>(`/tv/${data.id}/season/${data.season}`);
     return s.episodes;
   });
+
+export interface Genre { id: number; name: string }
+
+export const getGenres = createServerFn({ method: "GET" })
+  .inputValidator((data: { type: "movie" | "tv" }) => data)
+  .handler(async ({ data }) => {
+    const r = await tmdb<{ genres: Genre[] }>(`/genre/${data.type}/list`);
+    return r.genres;
+  });
+
+export const discoverMedia = createServerFn({ method: "GET" })
+  .inputValidator((data: { type: "movie" | "tv"; genre?: number; anime?: boolean; page?: number }) => data)
+  .handler(async ({ data }) => {
+    const params: Record<string, string | number> = {
+      sort_by: "popularity.desc",
+      page: data.page ?? 1,
+    };
+    if (data.genre) params.with_genres = data.genre;
+    if (data.anime) {
+      params.with_genres = 16;
+      params.with_original_language = "ja";
+    }
+    const r = await tmdb<{ results: TmdbItem[] }>(`/discover/${data.type}`, params);
+    return r.results.map((i) => normalize(i, data.type));
+  });
+
