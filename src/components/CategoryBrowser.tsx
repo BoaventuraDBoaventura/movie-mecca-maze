@@ -14,6 +14,7 @@ interface Props {
 
 export function CategoryBrowser({ title, type, anime }: Props) {
   const [genre, setGenre] = useState<{ id: number; name: string } | null>(null);
+  const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -25,6 +26,9 @@ export function CategoryBrowser({ title, type, anime }: Props) {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
+  // Reset to page 1 when filter changes
+  useEffect(() => { setPage(1); }, [genre?.id, anime, type]);
+
   const genresQuery = useQuery({
     queryKey: ["genres", type],
     queryFn: () => getGenres({ data: { type } }),
@@ -32,12 +36,16 @@ export function CategoryBrowser({ title, type, anime }: Props) {
   });
 
   const itemsQuery = useQuery({
-    queryKey: ["discover", type, genre?.id ?? null, anime ?? false],
+    queryKey: ["discover", type, genre?.id ?? null, anime ?? false, page],
     queryFn: () =>
-      discoverMedia({ data: { type, genre: genre?.id, anime } }),
+      discoverMedia({ data: { type, genre: genre?.id, anime, page } }),
+    placeholderData: (prev) => prev,
   });
 
   const genres = genresQuery.data ?? [];
+  const items = itemsQuery.data?.results ?? [];
+  const totalPages = itemsQuery.data?.totalPages ?? 1;
+
 
   return (
     <div className="pt-24 pb-12">
@@ -82,8 +90,19 @@ export function CategoryBrowser({ title, type, anime }: Props) {
       </div>
 
       <div className="px-3 sm:px-4 md:px-12">
-        <Grid items={itemsQuery.data ?? []} loading={itemsQuery.isLoading} type={type} />
+        <Grid items={items} loading={itemsQuery.isLoading} type={type} />
+        {totalPages > 1 && (
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onChange={(p) => {
+              setPage(p);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          />
+        )}
       </div>
+
     </div>
   );
 }
@@ -130,3 +149,51 @@ function Grid({ items, loading, type }: { items: MediaItem[]; loading: boolean; 
     </div>
   );
 }
+
+function Pagination({ page, totalPages, onChange }: { page: number; totalPages: number; onChange: (p: number) => void }) {
+  const pages = getPageNumbers(page, totalPages);
+  return (
+    <div className="flex items-center justify-center gap-1 mt-8 flex-wrap">
+      <PageBtn disabled={page <= 1} onClick={() => onChange(page - 1)}>Anterior</PageBtn>
+      {pages.map((p, i) =>
+        p === "..." ? (
+          <span key={`e-${i}`} className="px-2 text-muted-foreground">…</span>
+        ) : (
+          <PageBtn key={p} active={p === page} onClick={() => onChange(p)}>{p}</PageBtn>
+        ),
+      )}
+      <PageBtn disabled={page >= totalPages} onClick={() => onChange(page + 1)}>Próxima</PageBtn>
+    </div>
+  );
+}
+
+function PageBtn({ children, active, disabled, onClick }: { children: React.ReactNode; active?: boolean; disabled?: boolean; onClick?: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`min-w-9 h-9 px-3 text-sm border transition ${
+        active
+          ? "bg-primary border-primary text-primary-foreground"
+          : "border-border bg-background/40 hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-border"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function getPageNumbers(current: number, total: number): (number | "...")[] {
+  const out: (number | "...")[] = [];
+  const add = (n: number) => out.push(n);
+  const window = 1;
+  for (let i = 1; i <= total; i++) {
+    if (i === 1 || i === total || (i >= current - window && i <= current + window)) {
+      add(i);
+    } else if (out[out.length - 1] !== "...") {
+      out.push("...");
+    }
+  }
+  return out;
+}
+
