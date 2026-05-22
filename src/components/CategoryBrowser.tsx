@@ -1,19 +1,29 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
+import { ChevronDown, Check } from "lucide-react";
 import { discoverMedia, getGenres, type MediaItem } from "@/lib/tmdb.functions";
 
 const IMG = "https://image.tmdb.org/t/p/w500";
 
 interface Props {
+  title: string;
   type: "movie" | "tv";
   anime?: boolean;
-  /** Restrict displayed genres to this allow-list (e.g. anime sub-genres). */
-  allowedGenreIds?: number[];
 }
 
-export function CategoryBrowser({ type, anime, allowedGenreIds }: Props) {
-  const [genre, setGenre] = useState<number | null>(null);
+export function CategoryBrowser({ title, type, anime }: Props) {
+  const [genre, setGenre] = useState<{ id: number; name: string } | null>(null);
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
 
   const genresQuery = useQuery({
     queryKey: ["genres", type],
@@ -22,45 +32,58 @@ export function CategoryBrowser({ type, anime, allowedGenreIds }: Props) {
   });
 
   const itemsQuery = useQuery({
-    queryKey: ["discover", type, genre, anime ?? false],
+    queryKey: ["discover", type, genre?.id ?? null, anime ?? false],
     queryFn: () =>
-      discoverMedia({ data: { type, genre: genre ?? undefined, anime } }),
+      discoverMedia({ data: { type, genre: genre?.id, anime } }),
   });
 
-  const allGenres = genresQuery.data ?? [];
-  const genres = allowedGenreIds
-    ? allGenres.filter((g) => allowedGenreIds.includes(g.id))
-    : allGenres;
+  const genres = genresQuery.data ?? [];
 
   return (
-    <div className="px-3 sm:px-4 md:px-12 mt-6">
-      <div className="flex gap-2 overflow-x-auto no-scrollbar pb-3 -mx-3 sm:-mx-4 md:-mx-12 px-3 sm:px-4 md:px-12">
-        <button
-          onClick={() => setGenre(null)}
-          className={`shrink-0 px-3 py-1.5 rounded-full text-sm border transition ${
-            genre === null
-              ? "bg-primary border-primary text-primary-foreground"
-              : "border-border bg-background/50 hover:border-primary"
-          }`}
-        >
-          Todos
-        </button>
-        {genres.map((g) => (
+    <div className="pt-24 pb-12">
+      <div className="px-3 sm:px-4 md:px-12 flex items-center gap-3 flex-wrap">
+        <h1 className="text-3xl md:text-4xl font-black">{title}</h1>
+        <div className="relative" ref={ref}>
           <button
-            key={g.id}
-            onClick={() => setGenre(g.id)}
-            className={`shrink-0 px-3 py-1.5 rounded-full text-sm border transition ${
-              genre === g.id
-                ? "bg-primary border-primary text-primary-foreground"
-                : "border-border bg-background/50 hover:border-primary"
-            }`}
+            onClick={() => setOpen((o) => !o)}
+            className="flex items-center gap-2 border border-foreground/60 hover:border-foreground bg-background/40 px-3 py-1.5 text-sm font-medium"
           >
-            {g.name}
+            <span>{genre?.name ?? "Gêneros"}</span>
+            <ChevronDown className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`} />
           </button>
-        ))}
+          {open && (
+            <div className="absolute left-0 top-full mt-1 z-30 w-64 max-h-[60vh] overflow-y-auto bg-background/95 backdrop-blur border border-border shadow-xl">
+              <button
+                onClick={() => { setGenre(null); setOpen(false); }}
+                className="w-full flex items-center justify-between px-4 py-2 text-sm text-left hover:bg-primary/20"
+              >
+                <span>Todos os gêneros</span>
+                {genre === null && <Check className="w-4 h-4" />}
+              </button>
+              <div className="h-px bg-border" />
+              <div className="grid grid-cols-2">
+                {genres.map((g) => {
+                  const active = genre?.id === g.id;
+                  return (
+                    <button
+                      key={g.id}
+                      onClick={() => { setGenre(g); setOpen(false); }}
+                      className={`flex items-center justify-between px-4 py-2 text-sm text-left hover:bg-primary/20 ${active ? "text-primary" : ""}`}
+                    >
+                      <span className="truncate">{g.name}</span>
+                      {active && <Check className="w-4 h-4 shrink-0" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
-      <Grid items={itemsQuery.data ?? []} loading={itemsQuery.isLoading} type={type} />
+      <div className="px-3 sm:px-4 md:px-12">
+        <Grid items={itemsQuery.data ?? []} loading={itemsQuery.isLoading} type={type} />
+      </div>
     </div>
   );
 }
@@ -68,7 +91,7 @@ export function CategoryBrowser({ type, anime, allowedGenreIds }: Props) {
 function Grid({ items, loading, type }: { items: MediaItem[]; loading: boolean; type: "movie" | "tv" }) {
   if (loading) {
     return (
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-3 mt-4">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-3 mt-6">
         {Array.from({ length: 14 }).map((_, i) => (
           <div key={i} className="aspect-[2/3] rounded bg-card animate-pulse" />
         ))}
@@ -79,7 +102,7 @@ function Grid({ items, loading, type }: { items: MediaItem[]; loading: boolean; 
     return <p className="mt-6 text-muted-foreground">Nada encontrado.</p>;
   }
   return (
-    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-3 mt-4">
+    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-3 mt-6">
       {items.map((item) => (
         <Link
           key={item.id}
