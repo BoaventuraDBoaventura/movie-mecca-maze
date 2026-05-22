@@ -149,3 +149,51 @@ function Grid({ items, loading, type }: { items: MediaItem[]; loading: boolean; 
     </div>
   );
 }
+
+function Pagination({ page, totalPages, onChange }: { page: number; totalPages: number; onChange: (p: number) => void }) {
+  const pages = getPageNumbers(page, totalPages);
+  return (
+    <div className="flex items-center justify-center gap-1 mt-8 flex-wrap">
+      <PageBtn disabled={page <= 1} onClick={() => onChange(page - 1)}>Anterior</PageBtn>
+      {pages.map((p, i) =>
+        p === "..." ? (
+          <span key={`e-${i}`} className="px-2 text-muted-foreground">…</span>
+        ) : (
+          <PageBtn key={p} active={p === page} onClick={() => onChange(p)}>{p}</PageBtn>
+        ),
+      )}
+      <PageBtn disabled={page >= totalPages} onClick={() => onChange(page + 1)}>Próxima</PageBtn>
+    </div>
+  );
+}
+
+function PageBtn({ children, active, disabled, onClick }: { children: React.ReactNode; active?: boolean; disabled?: boolean; onClick?: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`min-w-9 h-9 px-3 text-sm border transition ${
+        active
+          ? "bg-primary border-primary text-primary-foreground"
+          : "border-border bg-background/40 hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-border"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function getPageNumbers(current: number, total: number): (number | "...")[] {
+  const out: (number | "...")[] = [];
+  const add = (n: number) => out.push(n);
+  const window = 1;
+  for (let i = 1; i <= total; i++) {
+    if (i === 1 || i === total || (i >= current - window && i <= current + window)) {
+      add(i);
+    } else if (out[out.length - 1] !== "...") {
+      out.push("...");
+    }
+  }
+  return out;
+}
+
