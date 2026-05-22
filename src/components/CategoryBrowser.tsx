@@ -90,8 +90,19 @@ export function CategoryBrowser({ title, type, anime }: Props) {
       </div>
 
       <div className="px-3 sm:px-4 md:px-12">
-        <Grid items={itemsQuery.data ?? []} loading={itemsQuery.isLoading} type={type} />
+        <Grid items={items} loading={itemsQuery.isLoading} type={type} />
+        {totalPages > 1 && (
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onChange={(p) => {
+              setPage(p);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          />
+        )}
       </div>
+
     </div>
   );
 }
