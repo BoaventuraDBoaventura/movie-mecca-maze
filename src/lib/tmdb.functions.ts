@@ -157,7 +157,15 @@ export const discoverMedia = createServerFn({ method: "GET" })
       params.with_genres = 16;
       params.with_original_language = "ja";
     }
-    const r = await tmdb<{ results: TmdbItem[] }>(`/discover/${data.type}`, params);
-    return r.results.map((i) => normalize(i, data.type));
+    const r = await tmdb<{ results: TmdbItem[]; total_pages: number; page: number }>(
+      `/discover/${data.type}`,
+      params,
+    );
+    return {
+      results: r.results.map((i) => normalize(i, data.type)),
+      page: r.page,
+      totalPages: Math.min(r.total_pages, 500),
+    };
   });
+
 
