@@ -63,3 +63,31 @@
 /* Hide scrollbars on horizontal rows */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Smart TV / D-pad navigation: clear focus outline on any focusable element */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+  transform: scale(1.04);
+  transition: transform 120ms ease;
+  z-index: 5;
+  position: relative;
+}
+
+/* Smooth scrolling helps when navigating with a TV remote */
+html { scroll-behavior: smooth; }
+
+/* TV safe area (overscan) + larger type on 10-foot UI (>= 1920px) */
+@media (min-width: 1920px) {
+  html { font-size: 20px; }
+  body { padding: 24px; } /* safe area for overscan */
+}
+@media (min-width: 2560px) {
+  html { font-size: 24px; }
+  body { padding: 40px; }
+}
+
