@@ -13,6 +13,7 @@ export function MediaRow({ title, items }: { title: string; items: MediaItem[] }
             key={`${item.media_type}-${item.id}`}
             to={item.media_type === "movie" ? "/movie/$id" : "/tv/$id"}
             params={{ id: String(item.id) }}
+            onFocus={(e) => e.currentTarget.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" })}
             className="shrink-0 w-28 sm:w-36 md:w-44 group relative"
           >
             <div className="aspect-[2/3] overflow-hidden rounded bg-card transition-transform duration-200 group-hover:scale-105 group-hover:ring-2 group-hover:ring-primary">
