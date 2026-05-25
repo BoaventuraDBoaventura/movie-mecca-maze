@@ -2,6 +2,15 @@ import { createServerFn } from "@tanstack/react-start";
 
 const BASE = "https://api.themoviedb.org/3";
 
+function parseTmdbPayload<T>(body: string): T {
+  const trimmed = body.trim();
+  const jsonText = trimmed.startsWith("processTmdbData(")
+    ? trimmed.replace(/^processTmdbData\(/, "").replace(/\);?$/, "")
+    : trimmed;
+
+  return JSON.parse(jsonText) as T;
+}
+
 async function tmdb<T>(path: string, params: Record<string, string | number> = {}): Promise<T> {
   const key = process.env.TMDB_API_KEY;
   if (!key) throw new Error("TMDB_API_KEY missing");
@@ -10,8 +19,18 @@ async function tmdb<T>(path: string, params: Record<string, string | number> = {
   url.searchParams.set("language", "pt-BR");
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, String(v));
   const res = await fetch(url.toString(), { headers: { Accept: "application/json" } });
-  if (!res.ok) throw new Error(`TMDb ${res.status}`);
-  return res.json() as Promise<T>;
+  const body = await res.text();
+  if (!res.ok) {
+    console.error(`TMDb API error ${res.status}: ${body.slice(0, 240)}`);
+    throw new Error(`TMDb ${res.status}`);
+  }
+
+  try {
+    return parseTmdbPayload<T>(body);
+  } catch (error) {
+    console.error("TMDb returned an invalid payload", body.slice(0, 240));
+    throw error;
+  }
 }
 
 export interface MediaItem {
