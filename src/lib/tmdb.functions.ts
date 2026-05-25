@@ -9,7 +9,7 @@ async function tmdb<T>(path: string, params: Record<string, string | number> = {
   url.searchParams.set("api_key", key);
   url.searchParams.set("language", "pt-BR");
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, String(v));
-  const res = await fetch(url.toString());
+  const res = await fetch(url.toString(), { headers: { Accept: "application/json" } });
   if (!res.ok) throw new Error(`TMDb ${res.status}`);
   return res.json() as Promise<T>;
 }
