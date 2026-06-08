@@ -91,7 +91,7 @@ function RootComponent() {
         <Outlet />
       </main>
       <footer className="px-4 md:px-12 py-10 text-sm text-muted-foreground border-t border-border mt-12">
-        <p>© {new Date().getFullYear()} Cineflix. Catálogo via TMDb. Player via EmbedMovies.</p>
+        <p>© {new Date().getFullYear()} Cineflix.</p>
       </footer>
     </QueryClientProvider>
   );
