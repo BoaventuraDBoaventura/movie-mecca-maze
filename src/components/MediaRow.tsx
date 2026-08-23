@@ -7,7 +7,7 @@ export function MediaRow({ title, items }: { title: string; items: MediaItem[] }
   return (
     <section className="px-3 sm:px-4 md:px-12 my-6 md:my-8">
       <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-3">{title}</h2>
-      <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 -mx-3 sm:-mx-4 md:-mx-12 px-3 sm:px-4 md:px-12">
+      <div className="flex gap-3 md:gap-4 overflow-x-auto no-scrollbar pb-2 -mx-3 sm:-mx-4 md:-mx-12 px-3 sm:px-4 md:px-12">
         {items.map((item) => (
           <Link
             key={`${item.media_type}-${item.id}`}
