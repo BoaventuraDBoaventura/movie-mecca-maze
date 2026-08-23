@@ -110,7 +110,7 @@ export function CategoryBrowser({ title, type, anime }: Props) {
 function Grid({ items, loading, type }: { items: MediaItem[]; loading: boolean; type: "movie" | "tv" }) {
   if (loading) {
     return (
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-3 mt-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 mt-6">
         {Array.from({ length: 14 }).map((_, i) => (
           <div key={i} className="aspect-[2/3] rounded bg-card animate-pulse" />
         ))}
@@ -121,7 +121,7 @@ function Grid({ items, loading, type }: { items: MediaItem[]; loading: boolean; 
     return <p className="mt-6 text-muted-foreground">Nada encontrado.</p>;
   }
   return (
-    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-3 mt-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 mt-6">
       {items.map((item) => (
         <Link
           key={item.id}
