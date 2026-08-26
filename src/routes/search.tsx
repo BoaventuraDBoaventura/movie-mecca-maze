@@ -8,7 +8,7 @@ const IMG = "https://image.tmdb.org/t/p/w500";
 
 export const Route = createFileRoute("/search")({
   validateSearch: z.object({ q: z.string().optional().default("") }),
-  head: () => ({ meta: [{ title: "Buscar — Cineflix" }] }),
+  head: () => ({ meta: [{ title: "Buscar — Mozflix" }] }),
   component: SearchPage,
 });
 

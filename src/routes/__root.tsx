@@ -54,12 +54,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Cineflix — Filmes e Séries Online" },
-      { name: "description", content: "Assista milhares de filmes e séries online no Cineflix." },
-      { property: "og:title", content: "Cineflix — Filmes e Séries Online" },
-      { name: "twitter:title", content: "Cineflix — Filmes e Séries Online" },
-      { property: "og:description", content: "Assista milhares de filmes e séries online no Cineflix." },
-      { name: "twitter:description", content: "Assista milhares de filmes e séries online no Cineflix." },
+      { title: "Mozflix — Filmes e Séries Online" },
+      { name: "description", content: "Assista milhares de filmes e séries online no Mozflix." },
+      { property: "og:title", content: "Mozflix — Filmes e Séries Online" },
+      { name: "twitter:title", content: "Mozflix — Filmes e Séries Online" },
+      { property: "og:description", content: "Assista milhares de filmes e séries online no Mozflix." },
+      { name: "twitter:description", content: "Assista milhares de filmes e séries online no Mozflix." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e22d2129-b957-47af-8512-2872020ab101/id-preview-b671eb9c--aaea6e0f-70d3-41e4-9288-8c34edb022e0.lovable.app-1779395034597.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e22d2129-b957-47af-8512-2872020ab101/id-preview-b671eb9c--aaea6e0f-70d3-41e4-9288-8c34edb022e0.lovable.app-1779395034597.png" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -91,7 +91,7 @@ function RootComponent() {
         <Outlet />
       </main>
       <footer className="px-4 md:px-12 py-10 text-sm text-muted-foreground border-t border-border mt-12">
-        <p>© {new Date().getFullYear()} Cineflix.</p>
+        <p>© {new Date().getFullYear()} Mozflix. <a href="https://www.profitableratecpmnetwork.com/spzmzuch0?key=64078af32458fdf3898e014c2f54d949" target="_blank" rel="nofollow noopener" className="underline hover:text-foreground">Parceiros</a></p>
       </footer>
     </QueryClientProvider>
   );
