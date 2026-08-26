@@ -176,12 +176,17 @@ export const discoverMedia = createServerFn({ method: "GET" })
       params.with_genres = 16;
       params.with_original_language = "ja";
     }
-    const r = await tmdb<{ results: TmdbItem[]; total_pages: number; page: number }>(
-      `/discover/${data.type}`,
-      params,
-    );
+    const page = Number(params.page);
+    const [r, next] = await Promise.all([
+      tmdb<{ results: TmdbItem[]; total_pages: number; page: number }>(`/discover/${data.type}`, params),
+      tmdb<{ results: TmdbItem[] }>(`/discover/${data.type}`, { ...params, page: page + 1 }).catch(
+        () => ({ results: [] as TmdbItem[] }),
+      ),
+    ]);
+    const ids = new Set(r.results.map((i) => i.id));
+    const extra = next.results.filter((i) => !ids.has(i.id)).slice(0, 3);
     return {
-      results: r.results.map((i) => normalize(i, data.type)),
+      results: [...r.results, ...extra].map((i) => normalize(i, data.type)),
       page: r.page,
       totalPages: Math.min(r.total_pages, 500),
     };
