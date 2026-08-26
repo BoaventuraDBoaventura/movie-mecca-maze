@@ -40,7 +40,7 @@ export function Navbar() {
           to="/"
           className="text-primary font-black text-xl sm:text-2xl md:text-3xl tracking-tight shrink-0"
         >
-          CINEFLIX
+          MOZFLIX
         </Link>
 
         {/* Menu centralizado */}
