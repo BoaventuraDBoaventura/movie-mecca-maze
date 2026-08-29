@@ -9,15 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermosRouteImport } from './routes/termos'
+import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as SeriesRouteImport } from './routes/series'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as PublicidadeRouteImport } from './routes/publicidade'
+import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as MoviesRouteImport } from './routes/movies'
+import { Route as DmcaRouteImport } from './routes/dmca'
+import { Route as ContactosRouteImport } from './routes/contactos'
 import { Route as AnimeRouteImport } from './routes/anime'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TvIdRouteImport } from './routes/tv.$id'
 import { Route as MovieIdRouteImport } from './routes/movie.$id'
 
+const TermosRoute = TermosRouteImport.update({
+  id: '/termos',
+  path: '/termos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SobreRoute = SobreRouteImport.update({
+  id: '/sobre',
+  path: '/sobre',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SeriesRoute = SeriesRouteImport.update({
   id: '/series',
   path: '/series',
@@ -33,9 +48,24 @@ const PublicidadeRoute = PublicidadeRouteImport.update({
   path: '/publicidade',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacidadeRoute = PrivacidadeRouteImport.update({
+  id: '/privacidade',
+  path: '/privacidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MoviesRoute = MoviesRouteImport.update({
   id: '/movies',
   path: '/movies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DmcaRoute = DmcaRouteImport.update({
+  id: '/dmca',
+  path: '/dmca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactosRoute = ContactosRouteImport.update({
+  id: '/contactos',
+  path: '/contactos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnimeRoute = AnimeRouteImport.update({
@@ -62,20 +92,30 @@ const MovieIdRoute = MovieIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/anime': typeof AnimeRoute
+  '/contactos': typeof ContactosRoute
+  '/dmca': typeof DmcaRoute
   '/movies': typeof MoviesRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/publicidade': typeof PublicidadeRoute
   '/search': typeof SearchRoute
   '/series': typeof SeriesRoute
+  '/sobre': typeof SobreRoute
+  '/termos': typeof TermosRoute
   '/movie/$id': typeof MovieIdRoute
   '/tv/$id': typeof TvIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/anime': typeof AnimeRoute
+  '/contactos': typeof ContactosRoute
+  '/dmca': typeof DmcaRoute
   '/movies': typeof MoviesRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/publicidade': typeof PublicidadeRoute
   '/search': typeof SearchRoute
   '/series': typeof SeriesRoute
+  '/sobre': typeof SobreRoute
+  '/termos': typeof TermosRoute
   '/movie/$id': typeof MovieIdRoute
   '/tv/$id': typeof TvIdRoute
 }
@@ -83,10 +123,15 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/anime': typeof AnimeRoute
+  '/contactos': typeof ContactosRoute
+  '/dmca': typeof DmcaRoute
   '/movies': typeof MoviesRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/publicidade': typeof PublicidadeRoute
   '/search': typeof SearchRoute
   '/series': typeof SeriesRoute
+  '/sobre': typeof SobreRoute
+  '/termos': typeof TermosRoute
   '/movie/$id': typeof MovieIdRoute
   '/tv/$id': typeof TvIdRoute
 }
@@ -95,30 +140,45 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/anime'
+    | '/contactos'
+    | '/dmca'
     | '/movies'
+    | '/privacidade'
     | '/publicidade'
     | '/search'
     | '/series'
+    | '/sobre'
+    | '/termos'
     | '/movie/$id'
     | '/tv/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/anime'
+    | '/contactos'
+    | '/dmca'
     | '/movies'
+    | '/privacidade'
     | '/publicidade'
     | '/search'
     | '/series'
+    | '/sobre'
+    | '/termos'
     | '/movie/$id'
     | '/tv/$id'
   id:
     | '__root__'
     | '/'
     | '/anime'
+    | '/contactos'
+    | '/dmca'
     | '/movies'
+    | '/privacidade'
     | '/publicidade'
     | '/search'
     | '/series'
+    | '/sobre'
+    | '/termos'
     | '/movie/$id'
     | '/tv/$id'
   fileRoutesById: FileRoutesById
@@ -126,16 +186,35 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnimeRoute: typeof AnimeRoute
+  ContactosRoute: typeof ContactosRoute
+  DmcaRoute: typeof DmcaRoute
   MoviesRoute: typeof MoviesRoute
+  PrivacidadeRoute: typeof PrivacidadeRoute
   PublicidadeRoute: typeof PublicidadeRoute
   SearchRoute: typeof SearchRoute
   SeriesRoute: typeof SeriesRoute
+  SobreRoute: typeof SobreRoute
+  TermosRoute: typeof TermosRoute
   MovieIdRoute: typeof MovieIdRoute
   TvIdRoute: typeof TvIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/termos': {
+      id: '/termos'
+      path: '/termos'
+      fullPath: '/termos'
+      preLoaderRoute: typeof TermosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sobre': {
+      id: '/sobre'
+      path: '/sobre'
+      fullPath: '/sobre'
+      preLoaderRoute: typeof SobreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/series': {
       id: '/series'
       path: '/series'
@@ -157,11 +236,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicidadeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacidade': {
+      id: '/privacidade'
+      path: '/privacidade'
+      fullPath: '/privacidade'
+      preLoaderRoute: typeof PrivacidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/movies': {
       id: '/movies'
       path: '/movies'
       fullPath: '/movies'
       preLoaderRoute: typeof MoviesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dmca': {
+      id: '/dmca'
+      path: '/dmca'
+      fullPath: '/dmca'
+      preLoaderRoute: typeof DmcaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contactos': {
+      id: '/contactos'
+      path: '/contactos'
+      fullPath: '/contactos'
+      preLoaderRoute: typeof ContactosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/anime': {
@@ -198,10 +298,15 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnimeRoute: AnimeRoute,
+  ContactosRoute: ContactosRoute,
+  DmcaRoute: DmcaRoute,
   MoviesRoute: MoviesRoute,
+  PrivacidadeRoute: PrivacidadeRoute,
   PublicidadeRoute: PublicidadeRoute,
   SearchRoute: SearchRoute,
   SeriesRoute: SeriesRoute,
+  SobreRoute: SobreRoute,
+  TermosRoute: TermosRoute,
   MovieIdRoute: MovieIdRoute,
   TvIdRoute: TvIdRoute,
 }
