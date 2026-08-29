@@ -184,7 +184,7 @@ export const discoverMedia = createServerFn({ method: "GET" })
       ),
     ]);
     const ids = new Set(r.results.map((i) => i.id));
-    const extra = next.results.filter((i) => !ids.has(i.id)).slice(0, 4);
+    const extra = next.results.filter((i) => !ids.has(i.id)).slice(0, 8);
     return {
       results: [...r.results, ...extra].map((i) => normalize(i, data.type)),
       page: r.page,
