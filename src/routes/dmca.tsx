@@ -10,7 +10,7 @@ export const Route = createFileRoute("/dmca")({
       { property: "og:description", content: "Como submeter um pedido de remoção de conteúdo protegido por direitos de autor no Mozflix." },
     ],
   }),
-  component: Dmca;
+  component: Dmca,
 });
 
 function Dmca() {

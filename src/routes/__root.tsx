@@ -91,7 +91,16 @@ function RootComponent() {
         <Outlet />
       </main>
       <footer className="px-4 md:px-12 py-10 text-sm text-muted-foreground border-t border-border mt-12">
-        <p>© {new Date().getFullYear()} Mozflix. <a href="https://www.profitableratecpmnetwork.com/spzmzuch0?key=64078af32458fdf3898e014c2f54d949" target="_blank" rel="nofollow noopener" className="underline hover:text-foreground">Parceiros</a></p>
+        <nav className="flex flex-wrap gap-x-6 gap-y-2 mb-6">
+          <Link to="/sobre" className="hover:text-foreground">Sobre</Link>
+          <Link to="/publicidade" className="hover:text-foreground">Publicidade</Link>
+          <Link to="/contactos" className="hover:text-foreground">Contactos</Link>
+          <Link to="/privacidade" className="hover:text-foreground">Privacidade</Link>
+          <Link to="/termos" className="hover:text-foreground">Termos de Uso</Link>
+          <Link to="/dmca" className="hover:text-foreground">DMCA</Link>
+          <a href="https://www.profitableratecpmnetwork.com/spzmzuch0?key=64078af32458fdf3898e014c2f54d949" target="_blank" rel="nofollow noopener" className="hover:text-foreground">Parceiros</a>
+        </nav>
+        <p>© {new Date().getFullYear()} Mozflix.</p>
       </footer>
     </QueryClientProvider>
   );
