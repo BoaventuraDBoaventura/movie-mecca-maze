@@ -105,6 +105,12 @@ function MoviePage() {
             <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <button
                 onClick={() => setPlaying(true)}
+                className="sm:hidden w-12 h-12 rounded-full bg-ember flex items-center justify-center shadow-[0_0_20px_rgba(232,93,58,0.4)] hover:scale-105 transition-transform cursor-pointer"
+              >
+                <Play className="w-5 h-5 text-white fill-current ml-0.5" />
+              </button>
+              <button
+                onClick={() => setPlaying(true)}
                 className="flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-white text-black font-bold rounded-2xl hover:bg-white/90 transition-colors cursor-pointer"
               >
                 <Play className="w-5 h-5 fill-current" />
