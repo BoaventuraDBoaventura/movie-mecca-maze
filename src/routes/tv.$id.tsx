@@ -58,7 +58,7 @@ function TvPage() {
           </div>
 
           {/* Play Button */}
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 hidden sm:flex items-center justify-center">
             <button
               onClick={() => setEpisode(1)}
               aria-label="Assistir primeiro episódio"
