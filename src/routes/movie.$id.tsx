@@ -49,7 +49,7 @@ function MoviePage() {
           </div>
 
           {/* Play Button */}
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 hidden sm:flex items-center justify-center">
             <button
               onClick={() => setPlaying(true)}
               aria-label="Assistir agora"
