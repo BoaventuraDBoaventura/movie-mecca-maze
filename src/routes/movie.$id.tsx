@@ -147,7 +147,7 @@ function MoviePage() {
               </div>
 
               <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <InfoBox label="Título original" value={movie.original_title || movie.title} />
+                <InfoBox label="Título original" value={movie.title} />
                 <InfoBox label="Ano" value={year || "—"} />
                 <InfoBox label="Duração" value={movie.runtime ? `${movie.runtime} min` : "—"} />
                 <InfoBox label="Avaliação" value={`${movie.vote_average.toFixed(1)} / 10`} />
