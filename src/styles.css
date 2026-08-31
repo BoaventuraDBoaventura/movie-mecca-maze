@@ -71,8 +71,8 @@
   --charcoal-700: oklch(0.22 0 0);
   --charcoal-600: oklch(0.3 0 0);
   --charcoal-500: oklch(0.35 0 0);
-  --font-display: "Syne", sans-serif;
-  --font-body: "Plus Jakarta Sans", sans-serif;
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
 }
 
 .dark { color-scheme: dark; }
