@@ -95,17 +95,86 @@ function RootComponent() {
       <main className="min-h-screen">
         <Outlet />
       </main>
-      <footer className="px-4 md:px-12 py-10 text-sm text-muted-foreground border-t border-border mt-12">
-        <nav className="flex flex-wrap gap-x-6 gap-y-2 mb-6">
-          <Link to="/sobre" className="hover:text-foreground">Sobre</Link>
-          <Link to="/publicidade" className="hover:text-foreground">Publicidade</Link>
-          <Link to="/contactos" className="hover:text-foreground">Contactos</Link>
-          <Link to="/privacidade" className="hover:text-foreground">Privacidade</Link>
-          <Link to="/termos" className="hover:text-foreground">Termos de Uso</Link>
-          <Link to="/dmca" className="hover:text-foreground">DMCA</Link>
-          <a href="https://www.profitableratecpmnetwork.com/spzmzuch0?key=64078af32458fdf3898e014c2f54d949" target="_blank" rel="nofollow noopener" className="hover:text-foreground">Parceiros</a>
-        </nav>
-        <p>© {new Date().getFullYear()} Mozflix.</p>
+      <footer className="relative mt-20 border-t border-border/70 bg-card/30">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent"
+        />
+        <div className="mx-auto max-w-7xl px-5 md:px-12 py-12 md:py-16">
+          <div className="grid gap-10 md:grid-cols-[minmax(0,1.3fr)_1fr_1fr]">
+            <div className="min-w-0">
+              <Link to="/" className="font-display text-2xl font-extrabold tracking-tight text-primary">
+                MOZFLIX
+              </Link>
+              <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
+                Milhares de filmes, séries e animes num só lugar. Descubra, explore e assista
+                onde quiser.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/80">
+                Navegar
+              </h3>
+              <ul className="mt-4 space-y-2.5 text-sm">
+                {[
+                  { to: "/movies", label: "Filmes" },
+                  { to: "/series", label: "Séries" },
+                  { to: "/anime", label: "Animes" },
+                  { to: "/sobre", label: "Sobre" },
+                ].map((l) => (
+                  <li key={l.to}>
+                    <Link
+                      to={l.to}
+                      className="text-muted-foreground transition-colors hover:text-primary"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/80">
+                Informações
+              </h3>
+              <ul className="mt-4 space-y-2.5 text-sm">
+                {[
+                  { to: "/publicidade", label: "Publicidade" },
+                  { to: "/contactos", label: "Contactos" },
+                  { to: "/privacidade", label: "Privacidade" },
+                  { to: "/termos", label: "Termos de Uso" },
+                  { to: "/dmca", label: "DMCA" },
+                ].map((l) => (
+                  <li key={l.to}>
+                    <Link
+                      to={l.to}
+                      className="text-muted-foreground transition-colors hover:text-primary"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+                <li>
+                  <a
+                    href="https://www.profitableratecpmnetwork.com/spzmzuch0?key=64078af32458fdf3898e014c2f54d949"
+                    target="_blank"
+                    rel="nofollow noopener"
+                    className="text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    Parceiros
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-12 flex flex-col gap-3 border-t border-border/60 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+            <p>© {new Date().getFullYear()} Mozflix.</p>
+            <p className="text-muted-foreground/70">Feito para os amantes de cinema.</p>
+          </div>
+        </div>
       </footer>
     </QueryClientProvider>
   );
