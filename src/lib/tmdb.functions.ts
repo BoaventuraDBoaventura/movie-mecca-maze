@@ -155,6 +155,15 @@ export const getSeason = createServerFn({ method: "GET" })
     return s.episodes;
   });
 
+export const getRecommendations = createServerFn({ method: "GET" })
+  .inputValidator((data: { id: number; type: "movie" | "tv" }) => data)
+  .handler(async ({ data }) => {
+    const r = await tmdb<{ results: TmdbItem[] }>(`/${data.type}/${data.id}/recommendations`).catch(
+      () => ({ results: [] as TmdbItem[] }),
+    );
+    return r.results.slice(0, 15).map((i) => normalize(i, data.type));
+  });
+
 export interface Genre { id: number; name: string }
 
 export const getGenres = createServerFn({ method: "GET" })
