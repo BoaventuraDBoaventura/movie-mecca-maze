@@ -3,6 +3,7 @@ import { queryOptions, useSuspenseQuery, useQuery } from "@tanstack/react-query"
 import { useState } from "react";
 import { Play, Plus, Star, ThumbsUp, ThumbsDown, ChevronDown } from "lucide-react";
 import { getTv, getSeason } from "@/lib/tmdb.functions";
+import { RecommendationsRow } from "@/components/RecommendationsRow";
 
 const BD = "https://image.tmdb.org/t/p/original";
 const POSTER = "https://image.tmdb.org/t/p/w500";
@@ -218,6 +219,8 @@ function TvPage() {
           </div>
         </div>
       </div>
+
+      <RecommendationsRow id={tv.id} type="tv" />
 
       {/* Player modal */}
       {episode !== null && (

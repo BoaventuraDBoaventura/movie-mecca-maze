@@ -3,6 +3,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Play, Plus, Star, ThumbsUp, ThumbsDown } from "lucide-react";
 import { getMovie } from "@/lib/tmdb.functions";
+import { RecommendationsRow } from "@/components/RecommendationsRow";
 
 const BD = "https://image.tmdb.org/t/p/original";
 const POSTER = "https://image.tmdb.org/t/p/w500";
@@ -156,6 +157,8 @@ function MoviePage() {
           </div>
         </div>
       </div>
+
+      <RecommendationsRow id={movie.id} type="movie" />
 
       {/* Player modal */}
       {playing && (
