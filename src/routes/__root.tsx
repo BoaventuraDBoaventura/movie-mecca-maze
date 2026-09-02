@@ -7,6 +7,12 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import {
+  Facebook as FacebookIcon,
+  Instagram as InstagramIcon,
+  Twitter as TwitterIcon,
+  Youtube as YoutubeIcon,
+} from "lucide-react";
 
 import appCss from "../styles.css?url";
 import { Navbar } from "@/components/Navbar";
