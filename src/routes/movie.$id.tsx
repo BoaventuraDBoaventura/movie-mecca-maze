@@ -170,6 +170,8 @@ function MoviePage() {
               frameBorder={0}
               allowFullScreen
               loading="lazy"
+              sandbox="allow-scripts allow-same-origin allow-forms"
+              referrerPolicy="no-referrer"
             />
             <button
               onClick={() => setPlaying(false)}
