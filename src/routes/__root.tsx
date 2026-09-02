@@ -95,84 +95,129 @@ function RootComponent() {
       <main className="min-h-screen">
         <Outlet />
       </main>
-      <footer className="relative mt-20 border-t border-border/70 bg-card/30">
+      <footer className="relative mt-24 overflow-hidden border-t border-border/40 bg-charcoal-950/80">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent"
+          className="pointer-events-none absolute inset-x-0 -top-24 h-24 bg-gradient-to-t from-background to-transparent"
         />
-        <div className="mx-auto max-w-7xl px-5 md:px-12 py-12 md:py-16">
-          <div className="grid gap-10 md:grid-cols-[minmax(0,1.3fr)_1fr_1fr]">
+        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/5 blur-3xl" />
+        <div className="pointer-events-none absolute -left-20 top-20 h-56 w-56 rounded-full bg-primary/3 blur-3xl" />
+
+        <div className="relative mx-auto max-w-7xl px-5 md:px-12 py-14 md:py-20">
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             <div className="min-w-0">
-              <Link to="/" className="font-display text-2xl font-extrabold tracking-tight text-primary">
+              <Link
+                to="/"
+                className="inline-block font-display text-3xl font-black tracking-tighter text-primary"
+              >
                 MOZFLIX
               </Link>
-              <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
-                Milhares de filmes, séries e animes num só lugar. Descubra, explore e assista
-                onde quiser.
+              <p className="mt-4 max-w-md text-sm leading-7 text-muted-foreground">
+                O seu destino para filmes, séries e animes. Descubra histórias incríveis,
+                explore novos mundos e assista onde e quando quiser.
               </p>
-            </div>
 
-            <div>
-              <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/80">
-                Navegar
-              </h3>
-              <ul className="mt-4 space-y-2.5 text-sm">
+              <div className="mt-6 flex items-center gap-3">
                 {[
-                  { to: "/movies", label: "Filmes" },
-                  { to: "/series", label: "Séries" },
-                  { to: "/anime", label: "Animes" },
-                  { to: "/sobre", label: "Sobre" },
-                ].map((l) => (
-                  <li key={l.to}>
-                    <Link
-                      to={l.to}
-                      className="text-muted-foreground transition-colors hover:text-primary"
-                    >
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/80">
-                Informações
-              </h3>
-              <ul className="mt-4 space-y-2.5 text-sm">
-                {[
-                  { to: "/publicidade", label: "Publicidade" },
-                  { to: "/contactos", label: "Contactos" },
-                  { to: "/privacidade", label: "Privacidade" },
-                  { to: "/termos", label: "Termos de Uso" },
-                  { to: "/dmca", label: "DMCA" },
-                ].map((l) => (
-                  <li key={l.to}>
-                    <Link
-                      to={l.to}
-                      className="text-muted-foreground transition-colors hover:text-primary"
-                    >
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-                <li>
+                  { label: "Instagram", icon: InstagramIcon },
+                  { label: "Twitter", icon: TwitterIcon },
+                  { label: "Youtube", icon: YoutubeIcon },
+                  { label: "Facebook", icon: FacebookIcon },
+                ].map(({ label, icon: Icon }) => (
                   <a
-                    href="https://www.profitableratecpmnetwork.com/spzmzuch0?key=64078af32458fdf3898e014c2f54d949"
-                    target="_blank"
-                    rel="nofollow noopener"
-                    className="text-muted-foreground transition-colors hover:text-primary"
+                    key={label}
+                    href="#"
+                    aria-label={label}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-border/60 bg-card/40 text-muted-foreground transition-all hover:scale-110 hover:border-primary/50 hover:text-primary hover:shadow-[0_0_15px_-3px_color-mix(in_oklab,var(--color-primary)_30%,transparent)]"
                   >
-                    Parceiros
+                    <Icon className="h-[18px] w-[18px]" />
                   </a>
-                </li>
-              </ul>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-10 sm:grid-cols-3">
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-foreground/90">
+                  Navegar
+                </h3>
+                <ul className="mt-5 space-y-3 text-sm">
+                  {[
+                    { to: "/", label: "Início" },
+                    { to: "/movies", label: "Filmes" },
+                    { to: "/series", label: "Séries" },
+                    { to: "/anime", label: "Animes" },
+                    { to: "/sobre", label: "Sobre" },
+                  ].map((l) => (
+                    <li key={l.to}>
+                      <Link
+                        to={l.to}
+                        className="text-muted-foreground transition-colors hover:text-primary"
+                      >
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-foreground/90">
+                  Informações
+                </h3>
+                <ul className="mt-5 space-y-3 text-sm">
+                  {[
+                    { to: "/publicidade", label: "Publicidade" },
+                    { to: "/contactos", label: "Contactos" },
+                    { to: "/privacidade", label: "Privacidade" },
+                    { to: "/termos", label: "Termos de Uso" },
+                    { to: "/dmca", label: "DMCA" },
+                  ].map((l) => (
+                    <li key={l.to}>
+                      <Link
+                        to={l.to}
+                        className="text-muted-foreground transition-colors hover:text-primary"
+                      >
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-foreground/90">
+                  Legal
+                </h3>
+                <ul className="mt-5 space-y-3 text-sm">
+                  <li>
+                    <a
+                      href="https://www.profitableratecpmnetwork.com/spzmzuch0?key=64078af32458fdf3898e014c2f54d949"
+                      target="_blank"
+                      rel="nofollow noopener"
+                      className="text-muted-foreground transition-colors hover:text-primary"
+                    >
+                      Parceiros
+                    </a>
+                  </li>
+                  <li>
+                    <span className="text-muted-foreground">Cookies</span>
+                  </li>
+                  <li>
+                    <span className="text-muted-foreground">Licenças</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
 
-          <div className="mt-12 flex flex-col gap-3 border-t border-border/60 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-            <p>© {new Date().getFullYear()} Mozflix.</p>
-            <p className="text-muted-foreground/70">Feito para os amantes de cinema.</p>
+          <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-border/40 pt-8 sm:flex-row">
+            <p className="text-xs text-muted-foreground">
+              © {new Date().getFullYear()} Mozflix. Todos os direitos reservados.
+            </p>
+            <p className="text-[11px] uppercase tracking-widest text-muted-foreground/60">
+              Feito para os amantes de cinema
+            </p>
           </div>
         </div>
       </footer>
