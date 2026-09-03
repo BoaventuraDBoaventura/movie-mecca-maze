@@ -34,9 +34,9 @@ function MoviePage() {
   const year = movie.release_date ? movie.release_date.slice(0, 4) : null;
 
   return (
-    <div className="min-h-screen bg-charcoal-950 font-body px-4 sm:px-6 lg:px-12 py-20 sm:py-24">
+    <div className="min-h-screen bg-charcoal-950 px-3 pb-12 pt-28 font-body sm:px-6 sm:py-24 lg:px-12">
       {/* Backdrop banner */}
-      <div className="max-w-6xl mx-auto relative h-56 sm:h-72 lg:h-80 rounded-3xl overflow-hidden">
+      <div className="relative mx-auto h-48 max-w-6xl overflow-hidden rounded-xl sm:h-72 sm:rounded-3xl lg:h-80">
         {movie.backdrop_path ? (
           <img
             src={`${BD}${movie.backdrop_path}`}
@@ -51,12 +51,12 @@ function MoviePage() {
       </div>
 
       {/* Main content card */}
-      <div className="max-w-6xl mx-auto -mt-24 sm:-mt-32 lg:-mt-36 relative z-10">
-        <div className="bg-charcoal-900 rounded-3xl border border-charcoal-700 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.7)] p-5 sm:p-8 lg:p-10">
+      <div className="relative z-10 mx-auto -mt-14 max-w-6xl sm:-mt-32 lg:-mt-36">
+        <div className="rounded-xl border border-charcoal-700 bg-charcoal-900 p-4 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.7)] sm:rounded-3xl sm:p-8 lg:p-10">
           <div className="flex flex-col md:flex-row gap-6 lg:gap-10">
             {/* Poster — smaller */}
             <div className="shrink-0 mx-auto md:mx-0">
-              <div className="w-36 sm:w-44 lg:w-52 rounded-2xl overflow-hidden shadow-2xl border border-charcoal-700 bg-charcoal-800">
+              <div className="w-28 overflow-hidden rounded-xl border border-charcoal-700 bg-charcoal-800 shadow-2xl sm:w-44 sm:rounded-2xl lg:w-52">
                 {movie.poster_path ? (
                   <img
                     src={`${POSTER}${movie.poster_path}`}
@@ -80,7 +80,7 @@ function MoviePage() {
                 <span className="text-ember font-semibold text-xs sm:text-sm">{match}% relevante</span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-display font-bold text-white leading-tight tracking-tight">
+              <h1 className="break-words text-2xl font-bold leading-tight tracking-normal text-white sm:text-4xl lg:text-5xl">
                 {movie.title}
               </h1>
 
@@ -119,10 +119,10 @@ function MoviePage() {
                 {movie.overview}
               </p>
 
-              <div className="flex flex-wrap items-center gap-3 mt-6">
+              <div className="mt-6 grid grid-cols-[minmax(0,1fr)_auto_auto_auto] items-center gap-2 sm:flex sm:flex-wrap sm:gap-3">
                 <button
                   onClick={() => setPlaying(true)}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-ember text-white font-semibold rounded-xl hover:bg-ember/90 transition-colors cursor-pointer shadow-[0_0_20px_rgba(232,93,58,0.35)]"
+                  className="flex min-h-11 min-w-0 items-center justify-center gap-2 rounded-lg bg-ember px-3 py-2.5 font-semibold text-white shadow-[0_0_20px_rgba(232,93,58,0.35)] transition-colors hover:bg-ember/90 sm:rounded-xl sm:px-5"
                 >
                   <Play className="w-4 h-4 fill-current" />
                   Assistir agora
@@ -147,7 +147,7 @@ function MoviePage() {
                 </button>
               </div>
 
-              <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
+               <div className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
                 <InfoBox label="Título original" value={movie.title} />
                 <InfoBox label="Ano" value={year || "—"} />
                 <InfoBox label="Duração" value={movie.runtime ? `${movie.runtime} min` : "—"} />
@@ -162,8 +162,8 @@ function MoviePage() {
 
       {/* Player modal */}
       {playing && (
-        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4">
-          <div className="w-full max-w-6xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-2 sm:p-4">
+          <div className="relative aspect-video w-full max-w-6xl overflow-hidden rounded-lg bg-black shadow-2xl sm:rounded-2xl">
             <iframe
               src={`https://myembed.biz/filme/${movie.id}`}
               className="w-full h-full"
@@ -176,7 +176,7 @@ function MoviePage() {
             <button
               onClick={() => setPlaying(false)}
               aria-label="Fechar player"
-              className="absolute top-4 right-4 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-lg text-white text-sm font-medium transition-colors"
+              className="absolute right-2 top-2 min-h-11 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-white/20 sm:right-4 sm:top-4"
             >
               Fechar
             </button>
@@ -189,7 +189,7 @@ function MoviePage() {
 
 function InfoBox({ label, value }: { label: string; value: string }) {
   return (
-    <div className="p-3 rounded-xl bg-charcoal-800/60 border border-charcoal-700/60">
+    <div className="min-w-0 rounded-lg border border-charcoal-700/60 bg-charcoal-800/60 p-2.5 sm:rounded-xl sm:p-3">
       <div className="text-[10px] uppercase tracking-wider text-white/40 font-semibold">{label}</div>
       <div className="text-sm text-white/80 truncate mt-1">{value}</div>
     </div>
