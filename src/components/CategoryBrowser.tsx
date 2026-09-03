@@ -48,19 +48,19 @@ export function CategoryBrowser({ title, type, anime }: Props) {
 
 
   return (
-    <div className="pt-24 pb-12">
-      <div className="px-3 sm:px-4 md:px-12 flex items-center gap-3 flex-wrap">
-        <h1 className="text-3xl md:text-4xl font-black">{title}</h1>
+    <div className="pb-12 pt-28 sm:pt-24">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 sm:flex sm:flex-wrap sm:px-4 md:px-12">
+        <h1 className="min-w-0 truncate text-2xl font-black sm:text-3xl md:text-4xl">{title}</h1>
         <div className="relative" ref={ref}>
           <button
             onClick={() => setOpen((o) => !o)}
-            className="flex items-center gap-2 border border-foreground/60 hover:border-foreground bg-background/40 px-3 py-1.5 text-sm font-medium"
+            className="flex min-h-11 max-w-40 items-center gap-2 border border-foreground/60 bg-background/40 px-3 py-1.5 text-sm font-medium hover:border-foreground"
           >
             <span>{genre?.name ?? "Gêneros"}</span>
             <ChevronDown className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`} />
           </button>
           {open && (
-            <div className="absolute left-0 top-full mt-1 z-30 w-64 max-h-[60vh] overflow-y-auto bg-background/95 backdrop-blur border border-border shadow-xl">
+            <div className="absolute right-0 top-full z-30 mt-1 max-h-[65svh] w-[min(18rem,calc(100vw-1.5rem))] overflow-y-auto border border-border bg-background/95 shadow-xl backdrop-blur sm:left-0 sm:right-auto">
               <button
                 onClick={() => { setGenre(null); setOpen(false); }}
                 className="w-full flex items-center justify-between px-4 py-2 text-sm text-left hover:bg-primary/20"
@@ -110,7 +110,7 @@ export function CategoryBrowser({ title, type, anime }: Props) {
 function Grid({ items, loading, type }: { items: MediaItem[]; loading: boolean; type: "movie" | "tv" }) {
   if (loading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 mt-6">
+      <div className="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 md:gap-5 lg:grid-cols-5 xl:grid-cols-6">
         {Array.from({ length: 14 }).map((_, i) => (
           <div key={i} className="aspect-[2/3] rounded bg-card animate-pulse" />
         ))}
@@ -121,7 +121,7 @@ function Grid({ items, loading, type }: { items: MediaItem[]; loading: boolean; 
     return <p className="mt-6 text-muted-foreground">Nada encontrado.</p>;
   }
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 mt-6">
+    <div className="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 md:gap-5 lg:grid-cols-5 xl:grid-cols-6">
       {items.map((item) => (
         <Link
           key={item.id}
@@ -153,8 +153,8 @@ function Grid({ items, loading, type }: { items: MediaItem[]; loading: boolean; 
 function Pagination({ page, totalPages, onChange }: { page: number; totalPages: number; onChange: (p: number) => void }) {
   const pages = getPageNumbers(page, totalPages);
   return (
-    <div className="flex items-center justify-center gap-1 mt-8 flex-wrap">
-      <PageBtn disabled={page <= 1} onClick={() => onChange(page - 1)}>Anterior</PageBtn>
+    <div className="mt-8 flex flex-wrap items-center justify-center gap-1">
+      <PageBtn compact disabled={page <= 1} onClick={() => onChange(page - 1)}>‹<span className="sr-only">Anterior</span></PageBtn>
       {pages.map((p, i) =>
         p === "..." ? (
           <span key={`e-${i}`} className="px-2 text-muted-foreground">…</span>
@@ -162,17 +162,17 @@ function Pagination({ page, totalPages, onChange }: { page: number; totalPages: 
           <PageBtn key={p} active={p === page} onClick={() => onChange(p)}>{p}</PageBtn>
         ),
       )}
-      <PageBtn disabled={page >= totalPages} onClick={() => onChange(page + 1)}>Próxima</PageBtn>
+      <PageBtn compact disabled={page >= totalPages} onClick={() => onChange(page + 1)}>›<span className="sr-only">Próxima</span></PageBtn>
     </div>
   );
 }
 
-function PageBtn({ children, active, disabled, onClick }: { children: React.ReactNode; active?: boolean; disabled?: boolean; onClick?: () => void }) {
+function PageBtn({ children, active, disabled, compact, onClick }: { children: React.ReactNode; active?: boolean; disabled?: boolean; compact?: boolean; onClick?: () => void }) {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`min-w-9 h-9 px-3 text-sm border transition ${
+      className={`h-11 min-w-11 border text-sm transition ${compact ? "px-2 text-xl" : "px-3"} ${
         active
           ? "bg-primary border-primary text-primary-foreground"
           : "border-border bg-background/40 hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-border"

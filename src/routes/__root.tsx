@@ -101,16 +101,13 @@ function RootComponent() {
       <main className="min-h-screen">
         <Outlet />
       </main>
-      <footer className="relative mt-24 overflow-hidden border-t border-border/40 bg-charcoal-950/80">
+      <footer className="relative mt-16 overflow-hidden border-t border-border/40 bg-charcoal-950/80 md:mt-24">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 -top-24 h-24 bg-gradient-to-t from-background to-transparent"
         />
-        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/5 blur-3xl" />
-        <div className="pointer-events-none absolute -left-20 top-20 h-56 w-56 rounded-full bg-primary/3 blur-3xl" />
-
-        <div className="relative mx-auto max-w-7xl px-5 md:px-12 py-14 md:py-20">
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-5 sm:py-14 md:px-12 md:py-20">
+          <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
             <div className="min-w-0">
               <Link
                 to="/"
@@ -142,8 +139,8 @@ function RootComponent() {
               </div>
             </div>
 
-            <div className="grid gap-10 sm:grid-cols-3">
-              <div>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3">
+              <div className="col-span-2 sm:col-span-1">
                 <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-foreground/90">
                   Navegar
                 </h3>
@@ -217,8 +214,8 @@ function RootComponent() {
             </div>
           </div>
 
-          <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-border/40 pt-8 sm:flex-row">
-            <p className="text-xs text-muted-foreground">
+          <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border/40 pt-6 sm:mt-14 sm:flex-row sm:items-center sm:gap-4 sm:pt-8">
+            <p className="text-xs leading-5 text-muted-foreground">
               © {new Date().getFullYear()} Mozflix. Todos os direitos reservados.
             </p>
             <p className="text-[11px] uppercase tracking-widest text-muted-foreground/60">
