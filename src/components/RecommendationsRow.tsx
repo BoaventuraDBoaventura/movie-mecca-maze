@@ -14,14 +14,14 @@ export function RecommendationsRow({ id, type }: { id: number; type: "movie" | "
   if (!items || items.length === 0) return null;
 
   return (
-    <div className="max-w-6xl mx-auto mt-10">
+    <div className="mx-auto mt-10 max-w-6xl">
       <div className="flex items-center gap-3 mb-5">
         <span className="w-1 h-6 rounded-full bg-ember" />
         <h2 className="text-xl sm:text-2xl font-display font-bold text-white">
           Títulos relacionados
         </h2>
       </div>
-      <div className="flex gap-3 sm:gap-4 overflow-x-auto no-scrollbar pb-4 -mx-1 px-1">
+      <div className="no-scrollbar -mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-4 sm:gap-4">
         {items.map((item) => (
           <Link
             key={item.id}
@@ -30,7 +30,7 @@ export function RecommendationsRow({ id, type }: { id: number; type: "movie" | "
             onFocus={(e) =>
               e.currentTarget.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" })
             }
-            className="shrink-0 w-32 sm:w-40 md:w-48 group"
+            className="group w-[40vw] max-w-40 shrink-0 snap-start sm:w-40 md:w-48 md:max-w-none"
           >
             <div className="relative aspect-[2/3] overflow-hidden rounded-2xl bg-charcoal-800 border border-charcoal-700 shadow-lg transition-all duration-300 group-hover:scale-[1.04] group-hover:ring-2 group-hover:ring-ember/60">
               {item.poster_path ? (

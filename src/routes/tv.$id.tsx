@@ -42,9 +42,9 @@ function TvPage() {
   const year = tv.first_air_date ? tv.first_air_date.slice(0, 4) : null;
 
   return (
-    <div className="min-h-screen bg-charcoal-950 font-body px-4 sm:px-6 lg:px-12 py-20 sm:py-24">
+    <div className="min-h-screen bg-charcoal-950 px-3 pb-12 pt-28 font-body sm:px-6 sm:py-24 lg:px-12">
       {/* Backdrop banner */}
-      <div className="max-w-6xl mx-auto relative h-56 sm:h-72 lg:h-80 rounded-3xl overflow-hidden">
+      <div className="relative mx-auto h-48 max-w-6xl overflow-hidden rounded-xl sm:h-72 sm:rounded-3xl lg:h-80">
         {tv.backdrop_path ? (
           <img
             src={`${BD}${tv.backdrop_path}`}
@@ -59,12 +59,12 @@ function TvPage() {
       </div>
 
       {/* Main content card */}
-      <div className="max-w-6xl mx-auto -mt-24 sm:-mt-32 lg:-mt-36 relative z-10">
-        <div className="bg-charcoal-900 rounded-3xl border border-charcoal-700 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.7)] p-5 sm:p-8 lg:p-10">
+      <div className="relative z-10 mx-auto -mt-14 max-w-6xl sm:-mt-32 lg:-mt-36">
+        <div className="rounded-xl border border-charcoal-700 bg-charcoal-900 p-4 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.7)] sm:rounded-3xl sm:p-8 lg:p-10">
           <div className="flex flex-col md:flex-row gap-6 lg:gap-10">
             {/* Poster — smaller */}
             <div className="shrink-0 mx-auto md:mx-0">
-              <div className="w-36 sm:w-44 lg:w-52 rounded-2xl overflow-hidden shadow-2xl border border-charcoal-700 bg-charcoal-800">
+              <div className="w-28 overflow-hidden rounded-xl border border-charcoal-700 bg-charcoal-800 shadow-2xl sm:w-44 sm:rounded-2xl lg:w-52">
                 {tv.poster_path ? (
                   <img
                     src={`${POSTER}${tv.poster_path}`}
@@ -88,7 +88,7 @@ function TvPage() {
                 <span className="text-ember font-semibold text-xs sm:text-sm">{match}% relevante</span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-display font-bold text-white leading-tight tracking-tight">
+              <h1 className="break-words text-2xl font-bold leading-tight tracking-normal text-white sm:text-4xl lg:text-5xl">
                 {tv.title}
               </h1>
 
@@ -127,10 +127,10 @@ function TvPage() {
                 {tv.overview}
               </p>
 
-              <div className="flex flex-wrap items-center gap-3 mt-6">
+              <div className="mt-6 grid grid-cols-[minmax(0,1fr)_auto_auto_auto] items-center gap-2 sm:flex sm:flex-wrap sm:gap-3">
                 <button
                   onClick={() => setEpisode(1)}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-ember text-white font-semibold rounded-xl hover:bg-ember/90 transition-colors cursor-pointer shadow-[0_0_20px_rgba(232,93,58,0.35)]"
+                  className="flex min-h-11 min-w-0 items-center justify-center gap-2 rounded-lg bg-ember px-3 py-2.5 font-semibold text-white shadow-[0_0_20px_rgba(232,93,58,0.35)] transition-colors hover:bg-ember/90 sm:rounded-xl sm:px-5"
                 >
                   <Play className="w-4 h-4 fill-current" />
                   Assistir agora
@@ -161,11 +161,11 @@ function TvPage() {
           <div className="mt-10 pt-8 border-t border-charcoal-700">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
               <h3 className="text-lg font-display font-bold text-white">Episódios</h3>
-              <div className="relative w-fit">
+              <div className="relative w-full sm:w-fit">
                 <select
                   value={season}
                   onChange={(e) => { setSeason(Number(e.target.value)); setEpisode(null); }}
-                  className="appearance-none bg-charcoal-800 border border-charcoal-600 rounded-xl pl-4 pr-10 py-2.5 text-sm font-semibold text-white/90 focus:outline-none focus:ring-2 focus:ring-ember/50 cursor-pointer"
+                  className="min-h-11 w-full appearance-none rounded-xl border border-charcoal-600 bg-charcoal-800 py-2.5 pl-4 pr-10 text-sm font-semibold text-white/90 focus:outline-none focus:ring-2 focus:ring-ember/50 sm:w-auto"
                 >
                   {tv.seasons.map((s) => (
                     <option key={s.season_number} value={s.season_number}>{s.name}</option>
@@ -180,14 +180,14 @@ function TvPage() {
                 <button
                   key={ep.episode_number}
                   onClick={() => setEpisode(ep.episode_number)}
-                  className={`text-left p-3 rounded-2xl transition-all group cursor-pointer border ${
+                  className={`group min-w-0 rounded-xl border p-3 text-left transition-all sm:rounded-2xl ${
                     episode === ep.episode_number
                       ? "bg-charcoal-800 border-ember/40"
                       : "bg-charcoal-800/40 border-charcoal-700/60 hover:bg-charcoal-800"
                   }`}
                 >
                   <div className="flex gap-3">
-                    <div className="relative w-28 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-charcoal-700">
+                    <div className="relative h-16 w-24 flex-shrink-0 overflow-hidden rounded-lg bg-charcoal-700 min-[380px]:w-28 sm:rounded-xl">
                       {ep.still_path ? (
                         <img
                           src={`${STILL}${ep.still_path}`}
@@ -224,8 +224,8 @@ function TvPage() {
 
       {/* Player modal */}
       {episode !== null && (
-        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4">
-          <div className="w-full max-w-6xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-2 sm:p-4">
+          <div className="relative aspect-video w-full max-w-6xl overflow-hidden rounded-lg bg-black shadow-2xl sm:rounded-2xl">
             <iframe
               src={`https://myembed.biz/serie/${tv.id}/${season}/${episode}`}
               className="w-full h-full"
@@ -238,7 +238,7 @@ function TvPage() {
             <button
               onClick={() => setEpisode(null)}
               aria-label="Fechar player"
-              className="absolute top-4 right-4 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-lg text-white text-sm font-medium transition-colors"
+              className="absolute right-2 top-2 min-h-11 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-white/20 sm:right-4 sm:top-4"
             >
               Fechar
             </button>

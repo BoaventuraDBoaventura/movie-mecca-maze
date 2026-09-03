@@ -79,7 +79,8 @@
 
 @layer base {
   * { border-color: var(--color-border); }
-  html, body { background-color: var(--color-background); color: var(--color-foreground); }
+  html, body { max-width: 100%; overflow-x: clip; background-color: var(--color-background); color: var(--color-foreground); }
+  button, a, input, select { touch-action: manipulation; }
 }
 
 /* Hide scrollbars on horizontal rows */
@@ -102,6 +103,11 @@ input:focus-visible,
 
 /* Smooth scrolling helps when navigating with a TV remote */
 html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}
 
 /* TV safe area (overscan) + larger type on 10-foot UI (>= 1920px) */
 @media (min-width: 1920px) {

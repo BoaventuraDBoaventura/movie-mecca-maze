@@ -35,10 +35,10 @@ export function Navbar() {
           : "bg-gradient-to-b from-background/85 to-transparent"
       }`}
     >
-      <div className="relative flex items-center justify-between gap-3 px-3 sm:px-4 md:px-12 h-14 sm:h-16">
+      <div className="relative grid h-14 grid-cols-[auto_minmax(0,1fr)] items-center gap-3 px-3 sm:h-16 sm:px-4 md:flex md:px-12">
         <Link
           to="/"
-          className="text-primary font-black text-xl sm:text-2xl md:text-3xl tracking-tight shrink-0"
+          className="shrink-0 text-xl font-black tracking-normal text-primary sm:text-2xl md:text-3xl"
         >
           MOZFLIX
         </Link>
@@ -62,10 +62,10 @@ export function Navbar() {
         {/* Barra de pesquisa */}
         <form
           onSubmit={submit}
-          className={`flex items-center gap-2 rounded-full border px-3 h-10 transition-all duration-300 shrink ${
+          className={`ml-auto flex h-10 min-w-0 items-center gap-2 rounded-full border px-3 transition-all duration-300 ${
             focused
-              ? "border-primary bg-background w-56 sm:w-72 md:w-80 shadow-[0_0_0_4px_color-mix(in_oklab,var(--color-primary)_18%,transparent)]"
-              : "border-border bg-background/60 backdrop-blur w-40 sm:w-52 md:w-60 hover:border-foreground/40"
+              ? "w-full border-primary bg-background sm:w-72 md:w-80 shadow-[0_0_0_4px_color-mix(in_oklab,var(--color-primary)_18%,transparent)]"
+              : "w-full border-border bg-background/60 backdrop-blur sm:w-52 md:w-60 hover:border-foreground/40"
           }`}
         >
           <button type="submit" aria-label="Buscar" className="shrink-0">
@@ -77,8 +77,9 @@ export function Navbar() {
             onChange={(e) => setQ(e.target.value)}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            placeholder="Buscar filmes, séries…"
-            className="bg-transparent text-sm outline-none w-full placeholder:text-muted-foreground"
+            placeholder="Buscar…"
+            aria-label="Buscar filmes e séries"
+            className="min-w-0 w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
           />
           {q && (
             <button
@@ -98,7 +99,7 @@ export function Navbar() {
       </div>
 
       {/* Menu mobile centralizado */}
-      <nav className="md:hidden flex justify-center gap-1 px-3 pb-2 overflow-x-auto no-scrollbar">
+      <nav className="md:hidden grid grid-cols-4 gap-1 px-3 pb-2">
         {links.map((l) => (
           <Link
             key={l.to}
@@ -106,7 +107,7 @@ export function Navbar() {
             activeOptions={{ exact: l.to === "/" }}
             activeProps={{ className: "bg-primary text-primary-foreground" }}
             inactiveProps={{ className: "text-foreground/80 bg-foreground/5" }}
-            className="shrink-0 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors"
+            className="flex min-h-9 min-w-0 items-center justify-center rounded-full px-1 text-[13px] font-medium transition-colors sm:px-3.5 sm:text-sm"
           >
             {l.label}
           </Link>

@@ -21,15 +21,15 @@ function SearchPage() {
   });
 
   return (
-    <div className="pt-24 px-4 md:px-12">
-      <h1 className="text-2xl md:text-3xl font-bold mb-6">
+    <div className="px-3 pb-12 pt-28 sm:px-4 sm:pt-24 md:px-12">
+      <h1 className="mb-5 break-words text-xl font-bold sm:text-2xl md:mb-6 md:text-3xl">
         {q ? `Resultados para "${q}"` : "Digite algo para buscar"}
       </h1>
       {isLoading && <p className="text-muted-foreground">Carregando...</p>}
       {data && data.results.length === 0 && q && (
         <p className="text-muted-foreground">Nada encontrado.</p>
       )}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-6">
         {data?.results.map((item) => (
           <Link
             key={`${item.media_type}-${item.id}`}
