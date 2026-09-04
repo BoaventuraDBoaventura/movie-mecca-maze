@@ -166,6 +166,10 @@ export const getRecommendations = createServerFn({ method: "GET" })
 
 export interface Genre { id: number; name: string }
 
+export interface WatchProvider { id: number; name: string; logoPath: string | null }
+
+const FEATURED_PROVIDER_IDS = [8, 119, 337, 1899, 350, 531, 307, 11];
+
 export const getGenres = createServerFn({ method: "GET" })
   .inputValidator((data: { type: "movie" | "tv" }) => data)
   .handler(async ({ data }) => {
@@ -173,14 +177,48 @@ export const getGenres = createServerFn({ method: "GET" })
     return r.genres;
   });
 
+export const getWatchProviders = createServerFn({ method: "GET" })
+  .inputValidator((data: { type: "movie" | "tv"; region?: string }) => data)
+  .handler(async ({ data }) => {
+    const region = data.region ?? "BR";
+    const r = await tmdb<{
+      results: {
+        provider_id: number;
+        provider_name: string;
+        logo_path: string | null;
+        display_priorities?: Record<string, number>;
+      }[];
+    }>(`/watch/providers/${data.type}`, { watch_region: region });
+
+    return r.results
+      .filter((provider) => FEATURED_PROVIDER_IDS.includes(provider.provider_id))
+      .sort((a, b) => {
+        const priorityA = a.display_priorities?.[region] ?? 999;
+        const priorityB = b.display_priorities?.[region] ?? 999;
+        return priorityA - priorityB;
+      })
+      .map((provider) => ({
+        id: provider.provider_id,
+        name: provider.provider_name,
+        logoPath: provider.logo_path,
+      } satisfies WatchProvider));
+  });
+
 export const discoverMedia = createServerFn({ method: "GET" })
-  .inputValidator((data: { type: "movie" | "tv"; genre?: number; anime?: boolean; page?: number }) => data)
+  .inputValidator((data: { type: "movie" | "tv"; genre?: number; anime?: boolean; page?: number; year?: number; provider?: number; region?: string }) => data)
   .handler(async ({ data }) => {
     const params: Record<string, string | number> = {
       sort_by: "popularity.desc",
       page: data.page ?? 1,
     };
     if (data.genre) params.with_genres = data.genre;
+    if (data.year) {
+      params[data.type === "movie" ? "primary_release_year" : "first_air_date_year"] = data.year;
+    }
+    if (data.provider) {
+      params.watch_region = data.region ?? "BR";
+      params.with_watch_providers = data.provider;
+    }
     if (data.anime) {
       params.with_genres = 16;
       params.with_original_language = "ja";

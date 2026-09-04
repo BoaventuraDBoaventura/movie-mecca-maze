@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { ChevronDown, Check } from "lucide-react";
-import { discoverMedia, getGenres, type MediaItem } from "@/lib/tmdb.functions";
+import { ChevronDown, Check, SlidersHorizontal, X } from "lucide-react";
+import { discoverMedia, getGenres, getWatchProviders, type MediaItem } from "@/lib/tmdb.functions";
 
 const IMG = "https://image.tmdb.org/t/p/w500";
 
@@ -10,24 +10,28 @@ interface Props {
   title: string;
   type: "movie" | "tv";
   anime?: boolean;
+  filters: CatalogFilters;
+  onFiltersChange: (filters: CatalogFilters) => void;
 }
 
-export function CategoryBrowser({ title, type, anime }: Props) {
-  const [genre, setGenre] = useState<{ id: number; name: string } | null>(null);
-  const [page, setPage] = useState(1);
-  const [open, setOpen] = useState(false);
+export interface CatalogFilters {
+  genre?: number;
+  year?: number;
+  provider?: number;
+  page: number;
+}
+
+export function CategoryBrowser({ title, type, anime, filters, onFiltersChange }: Props) {
+  const [open, setOpen] = useState<"genre" | "year" | "provider" | null>(null);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(null);
     };
     document.addEventListener("mousedown", onClick);
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
-
-  // Reset to page 1 when filter changes
-  useEffect(() => { setPage(1); }, [genre?.id, anime, type]);
 
   const genresQuery = useQuery({
     queryKey: ["genres", type],
@@ -35,56 +39,67 @@ export function CategoryBrowser({ title, type, anime }: Props) {
     staleTime: 1000 * 60 * 60,
   });
 
+  const providersQuery = useQuery({
+    queryKey: ["watch-providers", type, "BR"],
+    queryFn: () => getWatchProviders({ data: { type, region: "BR" } }),
+    staleTime: 1000 * 60 * 60 * 24,
+  });
+
   const itemsQuery = useQuery({
-    queryKey: ["discover", type, genre?.id ?? null, anime ?? false, page],
+    queryKey: ["discover", type, filters.genre ?? null, filters.year ?? null, filters.provider ?? null, anime ?? false, filters.page],
     queryFn: () =>
-      discoverMedia({ data: { type, genre: genre?.id, anime, page } }),
+      discoverMedia({ data: { type, genre: filters.genre, year: filters.year, provider: filters.provider, region: "BR", anime, page: filters.page } }),
     placeholderData: (prev) => prev,
   });
 
   const genres = genresQuery.data ?? [];
+  const providers = providersQuery.data ?? [];
   const items = itemsQuery.data?.results ?? [];
   const totalPages = itemsQuery.data?.totalPages ?? 1;
+  const activeGenre = genres.find((genre) => genre.id === filters.genre);
+  const activeProvider = providers.find((provider) => provider.id === filters.provider);
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 50 }, (_, index) => currentYear - index);
+  const hasFilters = Boolean(filters.genre || filters.year || filters.provider);
+  const updateFilters = (next: Partial<CatalogFilters>) => onFiltersChange({ ...filters, ...next, page: next.page ?? 1 });
 
 
   return (
     <div className="pb-12 pt-28 sm:pt-24">
-      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 sm:flex sm:flex-wrap sm:px-4 md:px-12">
+      <div className="px-3 sm:px-4 md:px-12">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:flex-wrap">
         <h1 className="min-w-0 truncate text-2xl font-black sm:text-3xl md:text-4xl">{title}</h1>
-        <div className="relative" ref={ref}>
-          <button
-            onClick={() => setOpen((o) => !o)}
-            className="flex min-h-11 max-w-40 items-center gap-2 border border-foreground/60 bg-background/40 px-3 py-1.5 text-sm font-medium hover:border-foreground"
-          >
-            <span>{genre?.name ?? "Gêneros"}</span>
-            <ChevronDown className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`} />
-          </button>
-          {open && (
-            <div className="absolute right-0 top-full z-30 mt-1 max-h-[65svh] w-[min(18rem,calc(100vw-1.5rem))] overflow-y-auto border border-border bg-background/95 shadow-xl backdrop-blur sm:left-0 sm:right-auto">
-              <button
-                onClick={() => { setGenre(null); setOpen(false); }}
-                className="w-full flex items-center justify-between px-4 py-2 text-sm text-left hover:bg-primary/20"
-              >
-                <span>Todos os gêneros</span>
-                {genre === null && <Check className="w-4 h-4" />}
-              </button>
-              <div className="h-px bg-border" />
-              <div className="grid grid-cols-2">
-                {genres.map((g) => {
-                  const active = genre?.id === g.id;
-                  return (
-                    <button
-                      key={g.id}
-                      onClick={() => { setGenre(g); setOpen(false); }}
-                      className={`flex items-center justify-between px-4 py-2 text-sm text-left hover:bg-primary/20 ${active ? "text-primary" : ""}`}
-                    >
-                      <span className="truncate">{g.name}</span>
-                      {active && <Check className="w-4 h-4 shrink-0" />}
-                    </button>
-                  );
-                })}
-              </div>
+        <span className="flex items-center gap-1.5 text-xs text-muted-foreground"><SlidersHorizontal className="h-4 w-4" /> Filtros</span>
+        </div>
+        <div className="mt-4 flex gap-2 overflow-x-auto pb-2 no-scrollbar" ref={ref}>
+          <FilterMenu label={activeGenre?.name ?? "Gêneros"} open={open === "genre"} onToggle={() => setOpen(open === "genre" ? null : "genre")}>
+            <FilterOption active={!filters.genre} label="Todos os gêneros" onClick={() => { updateFilters({ genre: undefined }); setOpen(null); }} />
+            <div className="grid grid-cols-2 border-t border-border">
+              {genres.map((genre) => <FilterOption key={genre.id} active={filters.genre === genre.id} label={genre.name} onClick={() => { updateFilters({ genre: genre.id }); setOpen(null); }} />)}
             </div>
+          </FilterMenu>
+
+          <FilterMenu label={filters.year ? String(filters.year) : "Ano"} open={open === "year"} onToggle={() => setOpen(open === "year" ? null : "year")}>
+            <FilterOption active={!filters.year} label="Todos os anos" onClick={() => { updateFilters({ year: undefined }); setOpen(null); }} />
+            <div className="grid grid-cols-3 border-t border-border">
+              {years.map((year) => <FilterOption key={year} active={filters.year === year} label={String(year)} onClick={() => { updateFilters({ year }); setOpen(null); }} />)}
+            </div>
+          </FilterMenu>
+
+          <FilterMenu label={activeProvider?.name ?? "Streaming"} open={open === "provider"} onToggle={() => setOpen(open === "provider" ? null : "provider")}>
+            <FilterOption active={!filters.provider} label="Todas as plataformas" onClick={() => { updateFilters({ provider: undefined }); setOpen(null); }} />
+            <div className="border-t border-border">
+              {providers.map((provider) => <FilterOption key={provider.id} active={filters.provider === provider.id} label={provider.name} onClick={() => { updateFilters({ provider: provider.id }); setOpen(null); }} />)}
+            </div>
+          </FilterMenu>
+
+          {hasFilters && (
+          <button
+            onClick={() => onFiltersChange({ page: 1 })}
+            className="flex min-h-11 shrink-0 items-center gap-2 border border-border bg-background/40 px-3 text-sm text-muted-foreground hover:border-primary hover:text-foreground"
+          >
+            <X className="h-4 w-4" /> Limpar
+          </button>
           )}
         </div>
       </div>
@@ -93,10 +108,10 @@ export function CategoryBrowser({ title, type, anime }: Props) {
         <Grid items={items} loading={itemsQuery.isLoading} type={type} />
         {totalPages > 1 && (
           <Pagination
-            page={page}
+             page={filters.page}
             totalPages={totalPages}
             onChange={(p) => {
-              setPage(p);
+               updateFilters({ page: p });
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           />
@@ -105,6 +120,22 @@ export function CategoryBrowser({ title, type, anime }: Props) {
 
     </div>
   );
+}
+
+function FilterMenu({ label, open, onToggle, children }: { label: string; open: boolean; onToggle: () => void; children: React.ReactNode }) {
+  return (
+    <div className="relative shrink-0">
+      <button onClick={onToggle} aria-expanded={open} className="flex min-h-11 max-w-48 items-center gap-2 border border-foreground/60 bg-background/40 px-3 text-sm font-medium hover:border-foreground">
+        <span className="truncate">{label}</span>
+        <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && <div className="fixed inset-x-3 top-44 z-40 max-h-[60svh] overflow-y-auto border border-border bg-background/98 shadow-2xl backdrop-blur sm:absolute sm:inset-x-auto sm:left-0 sm:top-full sm:mt-1 sm:w-72">{children}</div>}
+    </div>
+  );
+}
+
+function FilterOption({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+  return <button onClick={onClick} className={`flex min-h-11 w-full items-center justify-between gap-2 px-4 py-2 text-left text-sm hover:bg-primary/20 ${active ? "text-primary" : ""}`}><span className="truncate">{label}</span>{active && <Check className="h-4 w-4 shrink-0" />}</button>;
 }
 
 function Grid({ items, loading, type }: { items: MediaItem[]; loading: boolean; type: "movie" | "tv" }) {
